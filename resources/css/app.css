@@ -1,0 +1,50 @@
+.marker {
+    background-color: black !important;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%; /* Make it circular */
+    flex-shrink: 0; /* Prevent shrinking */
+}
+
+.divider{
+    background-color: black;
+    width: 100%;
+    height: 5px;
+}
+
+.profile-image {
+    width: 100px; /* or any desired size */
+    height: 100px; /* make sure it's equal to width */
+    border-radius: 50%; /* makes the image circular */
+    object-fit: cover; /* ensures the image covers the entire circle without distortion */
+}
+#clock {
+    font-size: 1.5em;
+    font-family: 'Arial', sans-serif;
+    color: #333;
+    text-align: center;
+
+
+}
+.sidebarnavitem{
+    text-decoration: none;
+}
+.dropdown-menu {
+    min-width: 160px; /* Adjust width if needed */
+}
+
+.dropdown-menu .form-select {
+    border: none;
+    box-shadow: none;
+}
+
+.dropdown-menu .form-select:focus {
+    box-shadow: none;
+    outline: none;
+}
+
+.dropdown-menu .dropdown-header {
+    padding: 0.5rem 1rem;
+    font-size: 1rem;
+    color: #6c757d; /* Bootstrap muted color */
+}
