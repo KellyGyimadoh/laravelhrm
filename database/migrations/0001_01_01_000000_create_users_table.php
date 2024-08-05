@@ -14,9 +14,10 @@ return new class extends Migration
     {
         Schema::create('users', function (Blueprint $table) {
             $table->id();
-            $table->foreignIdFor(Department::class);
+            $table->foreignIdFor(Department::class)->nullable();
             $table->string('firstname');
             $table->string('lastname');
+            $table->string('google_id')->unique()->nullable();
             $table->string('email')->unique();
             $table->string('role')->default('staff');
             $table->string('position')->default('unranked');

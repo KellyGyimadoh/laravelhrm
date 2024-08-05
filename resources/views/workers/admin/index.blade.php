@@ -85,7 +85,13 @@
                             <th scope="row">{{ $worker->firstname }}</th>
                             <td>{{ $worker->lastname }}</td>
                             <td>{{ $worker->email }}</td>
-                            <td>{{ $worker->department->name }}</td>
+                            @if($worker->department)
+                            <td>
+                                {{ $worker->department->name}}
+                            </td>
+                            @else
+                            <td>N/A</td>
+                            @endif
                             <td>{{ $worker->role }}</td>
                             <td>{{ $worker->position }}</td>
                             <td>@if ($worker->status===1)

@@ -138,12 +138,14 @@ document.addEventListener("DOMContentLoaded", function () {
         })
     } */
    //process payment for all
+   if( document.getElementById('select-all')){
         document.getElementById('select-all').onclick = function() {
             var checkboxes = document.getElementsByName('payroll_ids[]');
             for (var checkbox of checkboxes) {
                 checkbox.checked = this.checked;
             }
         }
+    }
     //password form
     const passwordForm = document.getElementById("passwordform");
     async function changePassword(e) {

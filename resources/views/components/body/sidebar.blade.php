@@ -34,7 +34,7 @@
             </x-body.sideitem>
         @endcan
         @can('viewstaff', 'App\\Models\User')
-            <x-body.sideitem item="Manage Attendance" :collapsed=true icon="bi bi-speedometer2" href="#"
+            <x-body.sideitem item="Manage Attendance" :collapsed=true icon="bi bi-calendar2-check-fill" href="#"
                 target="attendance-nav">
                 <x-body.subitems id="attendance-nav">
                     <x-body.sidebarlink href="/attendance/mark" item="Mark Attendance" />
@@ -43,7 +43,7 @@
             </x-body.sideitem>
         @endcan
 
-        <x-body.sideitem item="Manage Leave Request" :collapsed=true icon="bi bi-menu-button-wide" href="#"
+        <x-body.sideitem item="Manage Leave Request" :collapsed=true icon="bi bi-pencil-square" href="#"
             target="leave-nav">
 
             <x-body.subitems id="leave-nav">
@@ -53,7 +53,7 @@
                 <x-body.sidebarlink href="/leave/request" item="Request New Leave" />
             </x-body.subitems>
         </x-body.sideitem>
-        <x-body.sideitem item="Manage Salary" :collapsed=true icon="bi bi-menu-button-wide" href="#"
+        <x-body.sideitem item="Manage Salary" :collapsed=true icon="bi bi-currency-exchange" href="#"
             target="salary-nav">
             <x-body.subitems id="salary-nav">
                 @can('view', 'App\\Models\User')
@@ -63,13 +63,24 @@
                 <x-body.sidebarlink href="/worker/salary/{{ Auth::user()->id }}" item="View My Salary" />
             </x-body.subitems>
         </x-body.sideitem>
-        <x-body.sideitem item="Manage Payroll" :collapsed=true icon="bi bi-menu-button-wide" href="#"
+        <x-body.sideitem item="Manage Payroll" :collapsed=true icon="bi bi-person-square" href="#"
             target="payroll-nav">
 
             <x-body.subitems id="payroll-nav">
                 @can('view', 'App\\Models\User')
                     <x-body.sidebarlink href="/payrolls" item="Make Payment" />
                     <x-body.sidebarlink href="/payroll" item="Payroll Records" />
+                @endcan
+            </x-body.subitems>
+        </x-body.sideitem>
+        <x-body.sideitem item="Mails" :collapsed=true icon="bi bi-envelope-fill" href="#"
+            target="mail-nav">
+
+            <x-body.subitems id="mail-nav">
+                <x-body.sidebarlink href="/mails/send" item="Send Mail" />
+                @can('view', 'App\\Models\User')
+                    <x-body.sidebarlink href="/mails/workers" item="Send Workers Mail" />
+                    <x-body.sidebarlink href="/mails" item="Mail Log" />
                 @endcan
             </x-body.subitems>
         </x-body.sideitem>

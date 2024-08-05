@@ -4,6 +4,7 @@ use App\Jobs\AttendanceJob;
 use App\Http\Controllers\AttendanceController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DepartmentController;
+use App\Http\Controllers\MailController;
 use App\Http\Controllers\PasswordController;
 use App\Http\Controllers\PayrollController;
 use App\Http\Controllers\RegisteredUserController;
@@ -18,6 +19,10 @@ use SebastianBergmann\CodeCoverage\Report\Html\Dashboard;
 
 
 Route::get('/dashboard',[DashboardController::class,'index'])->middleware('auth')->can('viewAny','App\\Models\User');
+
+//google route
+Route::get('/login/google',[SessionController::class,'redirectToGoogle']);
+Route::get('auth/google/callback/',[SessionController::class,'handleGoogleCallBack']);
 
 //registerroute
 Route::get('/register',[RegisteredUserController::class,'create']);
@@ -106,7 +111,19 @@ Route::middleware('auth')->group(function(){
     Route::post('/payroll/process-payments', [PayrollController::class, 'processPayments'])->name('payroll.process-payments');
 
 });
+Route::middleware('auth')->group(function(){
 
+    Route::get('/mails/send',[MailController::class,'create']);
+    Route::post('/mails/send/{user}',[MailController::class,'store']);
+    Route::get('/mails/sent',[MailController::class,'sent']);
+    Route::get('/mails/workers',[MailController::class,'allWorkers']);
+    Route::post('/mails/workers/{user}',[MailController::class,'storeAll']);
+    //Route::patch('/mails/workers/{user}',[MailController::class,'update']);
+    Route::get('/mails',[MailController::class,'index']);
+    Route::get('/mails/search',[MailController::class,'search']);
+    Route::get('/mails/{id}',[MailController::class,'edit']);
+    Route::delete('/mails/send/{id}',[MailController::class,'delete']);
+});
 Route::get('/test-attendance-job', function () {
     AttendanceJob::dispatch();
     return 'Attendance job dispatched!';

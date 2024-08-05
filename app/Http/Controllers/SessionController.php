@@ -4,11 +4,13 @@ namespace App\Http\Controllers;
 
 use App\Models\Department;
 use App\Models\User;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rules\File;
 use Illuminate\Validation\ValidationException;
+use Laravel\Socialite\Facades\Socialite;
 
 class SessionController extends Controller
 {
@@ -32,11 +34,50 @@ class SessionController extends Controller
     /**
      * Store a newly created resource in storage.
      */
+    public function redirectToGoogle()
+    {
+        return Socialite::driver('google')->redirect();
+    }
+
+    public function handleGoogleCallback()
+    {
+        //dd('Callback route reached');
+        try {
+            $user = Socialite::driver('google')->user();
+            // Check if the user already exists in your database
+            $existingUser = User::where('email', $user->email)->first();
+            if ($existingUser) {
+                // Log the user in
+                Auth::login($existingUser, true);
+            } else {
+                // Extract first name and last name if available
+                $nameParts = explode(' ', $user->getName(), 2);
+                $firstname = $nameParts[0];
+                $lastname = isset($nameParts[1]) ? $nameParts[1] : '';
+
+                // Create a new user
+                $newUser = User::create([
+                    'firstname' => $firstname,
+                    'lastname' => $lastname,
+                    'email' => $user->getEmail(),
+                    'google_id' => $user->getId(),
+                    // You can set a random password since the user will log in with Google
+                    'password' => bcrypt('123456dummy'),
+                ]);
+
+                Auth::login($newUser, true);
+            }
+
+            return redirect()->intended('/dashboard');
+        } catch (Exception    $e) {
+            dd($e->getMessage());
+        }
+    }
     public function store(Request $request)
     {
-        $validated=$request->validate([
-            'email'=>['required','email'],
-            'password'=>['required']
+        $validated = $request->validate([
+            'email' => ['required', 'email'],
+            'password' => ['required']
         ]);
 
         // if(!Auth::attempt($validated)){
@@ -65,72 +106,71 @@ class SessionController extends Controller
      */
     public function show(User $user)
     {
-        return view('dashboard.edit',['user'=>$user]);
+        return view('dashboard.edit', ['user' => $user]);
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function delete(Request $request,User $user)
+    public function delete(Request $request, User $user)
     {
-          // Perform the deletion
-          $user->delete();
+        // Perform the deletion
+        $user->delete();
 
-          // Redirect back to the users list page with a success message
-          return redirect('/workers')->with('success', 'User deleted successfully.');
-
+        // Redirect back to the users list page with a success message
+        return redirect('/workers')->with('success', 'User deleted successfully.');
     }
 
     /**
      * Update the specified resource in storage.
      */
     public function update(Request $request, User $user)
-{
-    // Validate user data
-    $uservalidate = $request->validate([
-        'firstname' => ['required'],
-        'lastname' => ['required'],
-        'email' => ['required', 'email', 'unique:users,email,' . $user->id],
-        'image' => ['nullable', 'image', 'mimes:jpeg,png,jpg', 'max:2048'], // Validate image
-        'role' => ['required'],
-        'position'=>['required'],
-    ]);
+    {
+        // Validate user data
+        $uservalidate = $request->validate([
+            'firstname' => ['required'],
+            'lastname' => ['required'],
+            'email' => ['required', 'email', 'unique:users,email,' . $user->id],
+            'image' => ['nullable', 'image', 'mimes:jpeg,png,jpg', 'max:2048'], // Validate image
+            'role' => ['required'],
+            'position' => ['required'],
+        ]);
 
-    // Validate department data
-    $departmentvalidate = $request->validate([
-        'department' => ['required'],
-    ]);
+        // Validate department data
+        $departmentvalidate = $request->validate([
+            'department' => ['required'],
+        ]);
 
-    // Handle image upload if a new image is provided
-    if ($request->hasFile('image')) {
-        // Delete the old image if it exists
-        if ($user->image) {
-            Storage::delete($user->image);
+        // Handle image upload if a new image is provided
+        if ($request->hasFile('image')) {
+            // Delete the old image if it exists
+            if ($user->image) {
+                Storage::delete($user->image);
+            }
+
+            // Store the new image
+            $imagePath = $request->file('image')->store('profileimage');
+        } else {
+            // Keep the existing image path if no new image is uploaded
+            $imagePath = $user->image;
         }
 
-        // Store the new image
-        $imagePath = $request->file('image')->store('profileimage');
-    } else {
-        // Keep the existing image path if no new image is uploaded
-        $imagePath = $user->image;
+        // Update or create the department
+        $department = Department::updateOrCreate(['name' => $departmentvalidate['department']]);
+
+        // Update the user record
+        if ($user->update(array_merge($uservalidate, [
+            'image' => $imagePath,
+            'department_id' => $department->id,
+        ]))) {
+            // Redirect back with success message
+            return redirect('/dashboardprofile/' . $user->id)->with('success', 'Update Successful');
+        } else {
+
+            // Redirect back with success message
+            return redirect('/dashboardprofile/' . $user->id)->with('error', 'Update Failed');
+        }
     }
-
-    // Update or create the department
-    $department = Department::updateOrCreate(['name' => $departmentvalidate['department']]);
-
-    // Update the user record
-  if($user->update(array_merge($uservalidate, [
-        'image' => $imagePath,
-        'department_id' => $department->id,
-    ]))){
-       // Redirect back with success message
-    return redirect('/dashboardprofile/' . $user->id)->with('success', 'Update Successful');
-    }else{
-
-    // Redirect back with success message
-    return redirect('/dashboardprofile/' . $user->id)->with('error', 'Update Failed');
-    }
-}
 
 
     /**
@@ -140,18 +180,16 @@ class SessionController extends Controller
     {
         Auth::logout();
         return redirect('/');
-
     }
 
-    public function suspend(User $user){
-        if($user->status===2){
-            $user->update(['status'=>1]);
-            return redirect('/dashboardprofile/'.$user->id)->with('success','User Suspended');
-        }else{
-            $user->update(['status'=>2]);
-            return redirect('/dashboardprofile/'.$user->id)->with('success','User Activated');
+    public function suspend(User $user)
+    {
+        if ($user->status === 2) {
+            $user->update(['status' => 1]);
+            return redirect('/dashboardprofile/' . $user->id)->with('success', 'User Suspended');
+        } else {
+            $user->update(['status' => 2]);
+            return redirect('/dashboardprofile/' . $user->id)->with('success', 'User Activated');
         }
-
-
     }
 }

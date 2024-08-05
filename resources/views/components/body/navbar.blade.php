@@ -86,7 +86,7 @@
 
             <a class="nav-link nav-profile d-flex align-items-center pe-0" href="#"  data-bs-toggle="dropdown">
                 @if (Auth::user()->image)
-                <img src="{{ asset(Auth::user()->image) }}" class="profile-image" alt="Profile" class="rounded-circle">
+                <img src="{{ asset('storage/' . Auth::user()->image) }}" class="profile-image" alt="Profile" class="rounded-circle">
                 @else
                     <img src="{{ Vite::asset('resources/images/messages-1.jpg') }}" alt="profilepic"
                         class="rounded-circle">

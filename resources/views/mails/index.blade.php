@@ -1,35 +1,35 @@
 @props(['query'=>''])
-<x-layout theTitle="All Staff" href="/workers/staff">
+<x-layout theTitle="All mails" href="/mails">
     <div class="card">
 
         <div class="card-body">
-            <div class="mt-3"><a href="/workers/staff"><button class="btn btn-sm btn-primary" type="submit" title="Search">
-                View All Staff
+            <div class="mt-3"><a href="/mails"><button class="btn btn-sm btn-primary" type="submit" title="Search">
+                View All mail
             </button></a></div>
             @if($query)
             <p>Showing results for: <strong>{{ $query }}</strong></p>
 
         @endif
 
-        @if($workers->isEmpty())
-         <p class="text-danger">No workers found.</p>
+        @if($mails->isEmpty())
+         <p class="text-danger">No mails found.</p>
             <div class="search-bar mt-3">
-                <form class="search-form d-flex justify-content-end" method="GET" action="../search/staff/">
+                <form class="search-form d-flex justify-content-end" method="GET" action="/mails/search">
+<input type="date" name="searhdate"/>
                     <input
                         type="text"
                         name="q"
-                        placeholder="Search"
+                        placeholder="Search Recipient Email"
                         class="me-2"
                         title="Enter search keyword"
                         value="{{ old('q') }}" {{-- Retain the search query after submission --}}
 
                     >
                     <select name="role" class="w-25">
-
-                        <option value="staff" {{ request('role') }} selected>Staff</option>
-
+                        <option value="all" {{ request('role') == 'all' ? 'selected' : '' }}>All mails</option>
+                        <option value="staff" {{ request('role') == 'staff' ? 'selected' : '' }}>Staff</option>
+                        <option value="admin" {{ request('role') == 'admin' ? 'selected' : '' }}>Admin</option>
                     </select>
-
                     <button class="btn btn-sm btn-primary" type="submit" title="Search">
                         <i class="bi bi-search"></i>
                     </button>
@@ -41,20 +41,21 @@
             </div>
         @else
         <div class="search-bar mt-3">
-            <form class="search-form d-flex justify-content-end" method="GET" action="../search/staff/">
+            <form class="search-form d-flex justify-content-end" method="GET" action="/mails/search">
+                <input type="date" name="searhdate"/>
                 <input
                     type="text"
                     name="q"
-                    placeholder="Search"
+                    placeholder="Search Recipient Email"
                     title="Enter search keyword"
                     class="me-2"
                     value="{{ old('q') }}" {{-- Retain the search query after submission --}}
 
                 >
                 <select name="role" class="w-25">
-
+                    <option value="all" {{ request('role') == 'all' ? 'selected' : '' }}>All</option>
                     <option value="staff" {{ request('role') == 'staff' ? 'selected' : '' }}>Staff</option>
-
+                    <option value="admin" {{ request('role') == 'admin' ? 'selected' : '' }}>Admin</option>
                 </select>
                 <button class="btn btn-sm btn-primary" type="submit" title="Search">
                     <i class="bi bi-search"></i>
@@ -72,51 +73,36 @@
 
                 <thead>
                     <tr>
-                        <th scope="col">Firstname</th>
-                        <th scope="col">Lastname</th>
-                        <th scope="col">Email</th>
-                        <th scope="col">Department</th>
-                        <th scope="col">Role</th>
-                        <th scope="col">Position</th>
-                        <th scope="col">Status</th>
+                        <th scope="col">Number</th>
+                        <th scope="col">Sender</th>
+                        <th scope="col">Subject</th>
+                        <th scope="col">Body</th>
+                        <th scope="col">Recipient</th>
                         <th scope="col">Action</th>
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach ($workers as $worker)
+                    @foreach ($mails as $mail)
                         <tr>
-                            <th scope="row">{{ $worker->firstname }}</th>
-                            <td>{{ $worker->lastname }}</td>
-                            <td>{{ $worker->email }}</td>
-                            @if($worker->department)
-                            <td>
-                                {{ $worker->department->name}}
-                            </td>
-                            @else
-                            <td>N/A</td>
-                            @endif
-                            <td>{{ $worker->role }}</td>
-                            <td>{{ $worker->position }}</td>
-                            <td>@if ($worker->status===1)
-                                <button class="btn btn-danger fst-italic text-wrap disabled">Suspended</button>
-                                @else
-                                <button class="btn btn-success">Active</button>
-                            @endif</td>
+                            <th scope="row">{{$loop->iteration }}</th>
+                            <th>{{ $mail->user->firstname }}</th>
+                            <td>{{ $mail->subject }}</td>
+                            <td>{{ $mail->body }}</td>
+                            <td>{{ $mail->recipient}}</td>
 
-                            <td><a href="/dashboardprofile/{{$worker->id}}"><button class="btn btn-success">Edit</button></a>
+                            <td><a href="/mails/{{$mail->id}}"><button class="btn btn-success">Edit</button></a>
 
                             </td>
                         </tr>
-
                     @endforeach
                 </tbody>
-                @error($workers)
+                @error($mails)
                     <tr>{{ $error }}</tr>
                 @enderror
             </table>
 
             <!-- End Table with stripped rows -->
-            {{ $workers->links() }}
+            {{ $mails->links() }}
         </div>
     </div>
 @endif

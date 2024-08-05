@@ -37,11 +37,18 @@
                                         <x-forms.divider />
                                         <x-forms.checkbox name="rememberme" label="Remember Me" />
                                         <x-forms.button class="w-100">Login</x-forms.button>
-                                        <div class="col-12">
-                                            <p class="small mb-0">Don't have an account? <a href="/register">Create an
-                                                    account</a></p>
-                                        </div>
+
                                     </x-forms.form>
+                                    <div class="mt-3">
+                                        <a href="login/google" ><x-forms.button class="w-100 ">Login With Google</x-forms.button></a>
+
+                                    </div>
+
+                                    <div class="col-12 mt-2">
+                                        <p class="small mb-0">Don't have an account? <a href="/register">Create an
+                                                account</a></p>
+                                    </div>
+
 
 
                                 </div>

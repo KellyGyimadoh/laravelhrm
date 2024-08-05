@@ -13,7 +13,7 @@
 }
 
 .profile-image {
-    width: 100px; /* or any desired size */
+    width: 50px; /* or any desired size */
     height: 100px; /* make sure it's equal to width */
     border-radius: 50%; /* makes the image circular */
     object-fit: cover; /* ensures the image covers the entire circle without distortion */

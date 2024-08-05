@@ -70,7 +70,7 @@
 
                         <div class="d-flex align-items-center">
                             <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
-                                <i class="fa-solid fa-users"></i>
+                                <i class="bi bi-person-plus-fill"></i>
                             </div>
                             <div class="ps-3">
                                 <h6 id="workeractivecount"></h6>
@@ -110,7 +110,7 @@
 
                         <div class="d-flex align-items-center">
                             <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
-                                <i class="fa-solid fa-users"></i>
+                                <i class="bi bi-person-x"></i>
                             </div>
                             <div class="ps-3">
                                 <h6 id="workersuspendedcount"></h6>
@@ -261,7 +261,7 @@
 
                         <div class="d-flex align-items-center">
                             <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
-                                <i class="fa-solid fa-users"></i>
+                                <i class="bi bi-person-check-fill"></i>
                             </div>
                             <div class="ps-3">
                                 <h6 id="workercountpresent"></h6>
@@ -276,7 +276,7 @@
 
                         <div class="d-flex align-items-center">
                             <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
-                                <i class="fa-solid fa-users"></i>
+                                <i class="bi bi-person-dash-fill"></i>
                             </div>
                             <div class="ps-3">
                                 <h6 id="workercountabsent"></h6>
@@ -291,7 +291,7 @@
 
                         <div class="d-flex align-items-center">
                             <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
-                                <i class="fa-solid fa-users"></i>
+                                <i class="bi bi-people-fill"></i>
                             </div>
                             <div class="ps-3">
                                 <h6 id="workercountlate"></h6>
@@ -306,7 +306,7 @@
 
                         <div class="d-flex align-items-center">
                             <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
-                                <i class="fa-solid fa-users"></i>
+                                <i class="bi bi-calendar2-day-fill"></i>
                             </div>
                             <div class="ps-3">
                                 <h6 id="workercountleave"></h6>

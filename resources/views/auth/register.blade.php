@@ -26,14 +26,22 @@
                                     <x-forms.form method="POST" action="register" enctype="multipart/form-data"
                                         novalidate>
 
+
                                         <x-forms.input name="firstname" label="Firstname" placeholder="Firstname" />
 
 
                                         <x-forms.input name="lastname" label="Lastname" placeholder="Lastname" />
 
-
-                                        <x-forms.input name="email" label="Email" type="email"
+                                        @if (session('googleUser'))
+                                        <x-forms.input type="hidden" name="google_id" label=""
+                                            value="{{ session('googleUser')->id }}"/>
+                                        <x-forms.input type="hidden" name="email" label=""
+                                            value="{{ session('googleUser')->email }}"/>
+                                            @else
+                                            <x-forms.input name="email" label="Email" type="email"
                                             placeholder="man@mail.com" />
+                                    @endif
+
 
 
 
@@ -46,11 +54,11 @@
 
                                         <x-forms.field name="department" label="Department">
                                             <x-forms.select name="department">
-                                            <option value="">Select Department</option>
-                                            <option value="science">Science</option>
-                                            <option value="tech">Tech</option>
-                                            <option value="health">Health</option>
-                                        </x-forms.select>
+                                                <option value="">Select Department</option>
+                                                <option value="science">Science</option>
+                                                <option value="tech">Tech</option>
+                                                <option value="health">Health</option>
+                                            </x-forms.select>
                                         </x-forms.field>
                                         <x-forms.input name="image" label="Profile Photo" type="file" />
 
