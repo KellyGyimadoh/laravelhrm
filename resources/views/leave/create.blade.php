@@ -5,7 +5,7 @@
                 <div class="mt-3">
 
                     <x-forms.form method="POST" action="/leave/request" id="leaveform">
-                        <x-forms.input name="id" label="FullName" value="{{ $worker->id }}" disabled />
+                        <x-forms.input name="id" label="ID" value="{{ $worker->id }}" disabled />
                         <x-forms.input name="" label="FullName"
                             value="{{ $worker->firstname . '' . $worker->lastname }}" disabled />
                         <x-forms.input name="" label="Department" value="{{ $worker->department->name }}" disabled />

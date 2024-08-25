@@ -63,16 +63,17 @@
                 <x-body.sidebarlink href="/worker/salary/{{ Auth::user()->id }}" item="View My Salary" />
             </x-body.subitems>
         </x-body.sideitem>
+        @can('view', 'App\\Models\User')
         <x-body.sideitem item="Manage Payroll" :collapsed=true icon="bi bi-person-square" href="#"
             target="payroll-nav">
 
             <x-body.subitems id="payroll-nav">
-                @can('view', 'App\\Models\User')
+
                     <x-body.sidebarlink href="/payrolls" item="Make Payment" />
                     <x-body.sidebarlink href="/payroll" item="Payroll Records" />
-                @endcan
-            </x-body.subitems>
-        </x-body.sideitem>
+                </x-body.subitems>
+            </x-body.sideitem>
+            @endcan
         <x-body.sideitem item="Mails" :collapsed=true icon="bi bi-envelope-fill" href="#"
             target="mail-nav">
 
