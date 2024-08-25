@@ -1,5 +1,5 @@
 
-<x-layout theTitle="My Profile" href="/dashboard/{{ $user->id }}">
+<x-layout theTitle="{{$user->firstname}} Profile" href="/dashboard/{{ $user->id }}">
     <div class="row">
         <div class="col-xl-4">
             <div class="card">
